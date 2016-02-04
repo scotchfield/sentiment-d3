@@ -7,8 +7,7 @@ let render_candidates = ( data ) => {
 		width = 800 - margin.left - margin.right,
 		height = 400 - margin.top - margin.bottom
 
-	let data_keys = d3.keys( data ).sort((a, b) => { return data[b] - data[a] })
-	//data_keys = data_keys.map(( d ) => { return ( d === '' ) ? 'empty' : d })
+	let data_keys = d3.keys( data ).sort(( a, b ) => { return data[b] - data[a] })
 
 	let x = d3.scale.linear()
 		.domain([ 0, d3.max( d3.values( data ) ) ])
@@ -42,6 +41,23 @@ let render_candidates = ( data ) => {
 		.attr( 'fill', d3.scale.category20b() )
 }
 
+let render_bogus_candidates = ( data ) => {
+	let content = []
+
+	data.forEach(( d ) => {
+		if ( d.candidate === '' ) {
+			content.push( d.text )
+		}
+	})
+
+	d3.select( '#bogus_candidates' ).append( 'ul' )
+		.selectAll( 'li' )
+		.data( content )
+		.enter()
+		.append( 'li' )
+		.text(( d ) => { return d })
+}
+
 d3.json( 'convert/sentiment.json', ( error, json ) => {
 	let data = json.data
 
@@ -50,4 +66,6 @@ d3.json( 'convert/sentiment.json', ( error, json ) => {
 		candidates[d.candidate] = ( undefined === candidates[d.candidate]) ? 1 : candidates[d.candidate] + 1
 	})
 	render_candidates( candidates )
+
+	render_bogus_candidates( data )
 })
