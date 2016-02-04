@@ -6,7 +6,8 @@
 		<title>Sentiment analysis with D3.js</title>
 
 		<style type="text/css">
-		* { font-family: 'Open Sans', sans-serif; }
+* { font-family: 'Open Sans', sans-serif; }
+pre { white-space: pre-wrap; }
 		</style>
 	</head>
 	<body>
@@ -28,6 +29,32 @@
 <p>We'd benefit by having unique time values later in our analysis, so we create a new attribute called id_time, and use the timestamp (in seconds) with the ordered id associated with each timestamp. For example, the first tweet (<em>id</em>: 1) has a timestamp that can be obtained from the <em>tweet_created</em> attribute. With the help of moment, we convert the string date into a timestamp, and add the <em>id</em> value after a small division, since we know the total number of tweets in the index. This gives a value of 1438955686000.01, which is unique and ordered by time.</p>
 
 <h2>A sample sentiment object</h2>
+
+<p>Converting the CSV input to JSON results in an array of objects. Each object represents a tweet, and each property corresponds to one of the columns in the CSV source.</p>
+
+<pre>{
+	"id": "1",
+	"candidate": "No candidate mentioned",
+	"candidate_confidence": "1.0",
+	"relevant_yn": "yes",
+	"relevant_yn_confidence": "1.0",
+	"sentiment": "Neutral",
+	"sentiment_confidence": "0.6578",
+	"subject_matter": "None of the above",
+	"subject_matter_confidence": "1.0",
+	"candidate_gold": "",
+	"name": "I_Am_Kenzi",
+	"relevant_yn_gold": "",
+	"retweet_count": "5",
+	"sentiment_gold": "",
+	"subject_matter_gold": "",
+	"text": "RT @NancyLeeGrahn: How did everyone feel about the Climate Change question last night? Exactly. #GOPDebate",
+	"tweet_coord": "",
+	"tweet_created": "2015-08-07T09:54:46-04:00",
+	"tweet_id": "629697200650592256",
+	"tweet_location": "",
+	"user_timezone": "Quito"
+}</pre>
 
 <h2>The list of candidates</h2>
 
