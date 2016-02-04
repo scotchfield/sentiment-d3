@@ -12,7 +12,7 @@ fs.readFile( input_filename, ( err, data ) => {
 		throw err
 	}
 
-	let json = Baby.parse( data.toString(), { header: true } )
+	let json = Baby.parse( data.toString(), { header: true, skipEmptyLines: true } )
 
 	json.data.forEach(( d ) => {
 		let m = moment( d.tweet_created )
