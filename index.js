@@ -58,6 +58,38 @@ let render_bogus_candidates = ( data ) => {
 		.text(( d ) => { return d })
 }
 
+let render_candidates_circular = ( data ) => {
+	const margin = { top: 20, right: 20, bottom: 20, left: 20 },
+		radius = 200
+
+	let candidates = []
+	d3.keys( data ).forEach(( k ) => {
+		candidates.push({ 'name': k, 'count': data[k] })
+	})
+
+	let svg = d3.select( '#candidates_circular' ).append( 'svg' )
+		.attr( 'height', radius * 2 + margin.top + margin.bottom )
+		.attr( 'width', radius * 2 + margin.left + margin.right )
+
+	let pie = d3.layout.pie()
+		.value(( d ) => { return d.count })
+
+	let arc = d3.svg.arc()
+		.innerRadius( radius / 2 )
+		.outerRadius( radius )
+
+	let colour = d3.scale.category20b()
+
+	let chart = svg.append( 'g' )
+		.attr( 'transform', 'translate(' + ( margin.left + radius ) + ',' + ( margin.top + radius ) + ')' )
+
+	chart.selectAll( 'path' )
+		.data( pie( candidates ) )
+		.enter().append( 'path' )
+		.attr( 'd', arc )
+		.attr( 'fill', ( d, i ) => { return colour( i ) } )
+}
+
 d3.json( 'convert/sentiment.json', ( error, json ) => {
 	let data = json.data
 
@@ -68,4 +100,11 @@ d3.json( 'convert/sentiment.json', ( error, json ) => {
 	render_candidates( candidates )
 
 	render_bogus_candidates( data )
+
+	let candidates_fixed = {}
+	data.forEach(( d ) => {
+		d.candidate = ( '' === d.candidate ) ? 'No candidate mentioned' : d.candidate
+		candidates_fixed[d.candidate] = ( undefined === candidates_fixed[d.candidate]) ? 1 : candidates_fixed[d.candidate] + 1
+	})
+	render_candidates_circular( candidates_fixed )
 })
