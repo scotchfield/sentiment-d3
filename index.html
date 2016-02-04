@@ -5,21 +5,28 @@
 		<title>Sentiment analysis with D3.js</title>
 	</head>
 	<body>
-		<h1>Exploring the First GOP Debate Twitter Sentiment data with D3.js</h1>
 
-		<p><em>This data originally came from <a href="http://www.crowdflower.com/data-for-everyone">Crowdflower's Data for Everyone library</a>, while the version used here is hosted at <a href="https://www.kaggle.com/crowdflower/first-gop-debate-twitter-sentiment/">Kaggle</a>.</em></p>
+<h1>Exploring the First GOP Debate Twitter Sentiment data with D3.js</h1>
 
-		<p>As the original source says,</p>
+<p><em>This data originally came from <a href="http://www.crowdflower.com/data-for-everyone">Crowdflower's Data for Everyone library</a>, while the version used here is hosted at <a href="https://www.kaggle.com/crowdflower/first-gop-debate-twitter-sentiment/">Kaggle</a>.</em></p>
 
-		<blockquote><p>We looked through tens of thousands of tweets about the early August GOP debate in Ohio and asked contributors to do both sentiment analysis and data categorization. Contributors were asked if the tweet was relevant, which candidate was mentioned, what subject was mentioned, and then what the sentiment was for a given tweet. We've removed the non-relevant messages from the uploaded dataset.</p></blockquote>
+<p>As the original source says,</p>
 
-		<h2>Converting the dataset</h2>
+<blockquote><p>We looked through tens of thousands of tweets about the early August GOP debate in Ohio and asked contributors to do both sentiment analysis and data categorization. Contributors were asked if the tweet was relevant, which candidate was mentioned, what subject was mentioned, and then what the sentiment was for a given tweet. We've removed the non-relevant messages from the uploaded dataset.</p></blockquote>
 
-		<h2>A sample sentiment object</h2>
+<h2>Converting the dataset</h2>
 
-		<h2>The list of candidates</h2>
+<p>Kaggle's data is a slightly reformatted CSV version of the original source. For our analysis, we'll convert this to a JSON object.</p>
 
-		<div id="candidates"></div>
+<p>To do this, we create a small application that can be found in the <a href="convert/input.js">convert</a> subdirectory. Using <a href="https://github.com/Rich-Harris/BabyParse">Baby Parse</a>, a Node.js-friendly version of <a href="http://papaparse.com/">Papa Parse</a>, we convert the CSV string to a JSON object.</p>
+
+<p>We'd benefit by having unique time values later in our analysis, so we create a new attribute called id_time, and use the timestamp (in seconds) with the ordered id associated with each timestamp. For example, the first tweet (<em>id</em>: 1) has a timestamp that can be obtained from the <em>tweet_created</em> attribute. With the help of moment, we convert the string date into a timestamp, and add the <em>id</em> value after a small division, since we know the total number of tweets in the index. This gives a value of 1438955686000.01, which is unique and ordered by time.</p>
+
+<h2>A sample sentiment object</h2>
+
+<h2>The list of candidates</h2>
+
+<div id="candidates"></div>
 
 		<script type="text/javascript" src="src.js"></script>
 	</body>
