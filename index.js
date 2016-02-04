@@ -23,22 +23,23 @@ let render_candidates = ( data ) => {
 		.orient( 'left' )
 
 	let svg = d3.select( '#candidates' ).append( 'svg' )
-		.attr( 'height', height + margin.left + margin.right )
-		.attr( 'width', width + margin.top + margin.bottom )
+		.attr( 'height', height + margin.top + margin.bottom )
+		.attr( 'width', width + margin.left + margin.right )
 
 	let chart = svg.append( 'g' )
 		.attr( 'transform', 'translate(' + margin.left + ',' + margin.top + ')' )
 
-    chart.append( 'g' )
-    	.call( yAxis )
+	chart.append( 'g' )
+		.call( yAxis )
 
-    chart.selectAll( '.bar' )
-    	.data( data_keys )
-    	.enter().append( 'rect' )
-    	.attr( 'class', 'bar' )
-    	.attr( 'width', ( d ) => { return x( data[d] ) } )
-    	.attr( 'y', ( d ) => { return y(d) + 5 } )
-    	.attr( 'height', 16 )
+	chart.selectAll( '.bar' )
+		.data( data_keys )
+		.enter().append( 'rect' )
+		.attr( 'class', 'bar' )
+		.attr( 'width', ( d ) => { return x( data[d] ) } )
+		.attr( 'y', ( d ) => { return y(d) + 5 } )
+		.attr( 'height', 16 )
+		.attr( 'fill', d3.scale.category20b() )
 }
 
 d3.json( 'convert/sentiment.json', ( error, json ) => {
