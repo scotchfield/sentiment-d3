@@ -83,10 +83,11 @@ let render_candidates_circular = ( data ) => {
 	let chart = svg.append( 'g' )
 		.attr( 'transform', 'translate(' + ( margin.left + radius ) + ',' + ( margin.top + radius ) + ')' )
 
-	chart.selectAll( 'path' )
+	let path = chart.selectAll( 'path' )
 		.data( pie( candidates ) )
 		.enter().append( 'path' )
 		.attr( 'd', arc )
+		.attr( 'class', ( d, i ) => { return 'path-' + i } )
 		.attr( 'fill', ( d, i ) => { return colour( i ) } )
 
 	const legendSize = 18, legendSpacing = 4
@@ -94,7 +95,6 @@ let render_candidates_circular = ( data ) => {
 	let legend = chart.selectAll( '.legend' )
 		.data( candidates )
 		.enter().append( 'g' )
-		.attr( 'class', 'legend' )
 		.attr( 'transform', ( d, i ) => {
 			let height = legendSize + legendSpacing
 			let offset = height * colour.domain().length / 2
@@ -103,16 +103,30 @@ let render_candidates_circular = ( data ) => {
 			return 'translate(' + hor + ',' + ver + ')'
 		} )
 
-	legend.append( 'rect' )
+	let rect = legend.append( 'rect' )
 		.attr( 'width', legendSize )
 		.attr( 'height', legendSize )
 		.style( 'fill', ( d, i ) => { return colour( i ) } )
 		.style( 'stroke', ( d, i ) => { return colour( i ) } )
 
-	legend.append( 'text' )
+	rect.on( 'mouseover', ( d, i ) => {
+		d3.select( '.path-' + i ).attr( 'fill', '#ffd837' )
+	} )
+	rect.on( 'mouseout', ( d, i ) => {
+		d3.select( '.path-' + i ).attr( 'fill', colour( i ) )
+	} )
+
+	let text = legend.append( 'text' )
 		.attr( 'x', legendSize + legendSpacing )
 		.attr( 'y', legendSize - legendSpacing )
-		.text( ( d ) => { console.log( d ); return d.name } )
+		.text( ( d ) => { return d.name } )
+
+	text.on( 'mouseover', ( d, i ) => {
+		d3.select( '.path-' + i ).attr( 'fill', '#ffd837' )
+	} )
+	text.on( 'mouseout', ( d, i ) => {
+		d3.select( '.path-' + i ).attr( 'fill', colour( i ) )
+	} )
 }
 
 d3.json( 'convert/sentiment.json', ( error, json ) => {
