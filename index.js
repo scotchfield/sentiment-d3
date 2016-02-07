@@ -60,7 +60,7 @@ let render_bogus_candidates = ( data ) => {
 
 let render_candidates_circular = ( data ) => {
 	const margin = { top: 20, right: 20, bottom: 20, left: 20 },
-		radius = 200
+		radius = 200, padding_right = 300
 
 	let candidates = []
 	d3.keys( data ).forEach(( k ) => {
@@ -69,7 +69,7 @@ let render_candidates_circular = ( data ) => {
 
 	let svg = d3.select( '#candidates_circular' ).append( 'svg' )
 		.attr( 'height', radius * 2 + margin.top + margin.bottom )
-		.attr( 'width', radius * 2 + margin.left + margin.right )
+		.attr( 'width', radius * 2 + margin.left + margin.right + padding_right )
 
 	let pie = d3.layout.pie()
 		.value(( d ) => { return d.count })
@@ -88,6 +88,31 @@ let render_candidates_circular = ( data ) => {
 		.enter().append( 'path' )
 		.attr( 'd', arc )
 		.attr( 'fill', ( d, i ) => { return colour( i ) } )
+
+	const legendSize = 18, legendSpacing = 4
+
+	let legend = chart.selectAll( '.legend' )
+		.data( candidates )
+		.enter().append( 'g' )
+		.attr( 'class', 'legend' )
+		.attr( 'transform', ( d, i ) => {
+			let height = legendSize + legendSpacing
+			let offset = height * colour.domain().length / 2
+			let hor = -2 * legendSize + padding_right
+			let ver = i * height - offset
+			return 'translate(' + hor + ',' + ver + ')'
+		} )
+
+	legend.append( 'rect' )
+		.attr( 'width', legendSize )
+		.attr( 'height', legendSize )
+		.style( 'fill', ( d, i ) => { return colour( i ) } )
+		.style( 'stroke', ( d, i ) => { return colour( i ) } )
+
+	legend.append( 'text' )
+		.attr( 'x', legendSize + legendSpacing )
+		.attr( 'y', legendSize - legendSpacing )
+		.text( ( d ) => { console.log( d ); return d.name } )
 }
 
 d3.json( 'convert/sentiment.json', ( error, json ) => {
